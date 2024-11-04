@@ -58,7 +58,3 @@ CGPA: 3.8
 ```
 student_management_system.py  # Main script file
 ```
-
-## License
-
-This project is available under the MIT License.
