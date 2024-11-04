@@ -1,5 +1,7 @@
 """Student Management System"""
 
+from tabulate import tabulate
+
 print(" _______________________________________________________________________________________________________")
 print("\t\t\t\t\t\t\t\t\tSTUDENT MANAGEMENT SYSTEM\t\t\t\t\t\t\t\t\t\t\t")
 print(" -------------------------------------------------------------------------------------------------------")
@@ -98,25 +100,41 @@ def search(root, id):
 
 def inorder(root):
     if root:
-        inorder(root.left)
-        print(f"{root.id}   \t\t\t  {root.name} \t\t\t  {root.dept} \t\t\t  {root.course}   \t\t\t  {root.cgpa}")
-        inorder(root.right)
+        students = []
+        inorder_helper(root, students)
+        print(tabulate(students, headers=["Roll Number", "Name", "Department", "Course", "CGPA"], tablefmt="grid"))
 
+def inorder_helper(root, students):
+    if root:
+        inorder_helper(root.left, students)
+        students.append([root.id, root.name, root.dept, root.course, root.cgpa])
+        inorder_helper(root.right, students)
 
 def display_dept(root, dept):
     if root:
-        display_dept(root.left, dept)
-        if root.dept == dept:
-                print(f"{root.id}   \t\t\t  {root.name} \t\t\t  {root.dept} \t\t\t  {root.course}   \t\t\t  {root.cgpa}")
-        display_dept(root.right, dept)
+        students = []
+        display_dept_helper(root, dept, students)
+        print(tabulate(students, headers=["Roll Number", "Name", "Department", "Course", "CGPA"], tablefmt="grid"))
 
+def display_dept_helper(root, dept, students):
+    if root:
+        display_dept_helper(root.left, dept, students)
+        if root.dept == dept:
+            students.append([root.id, root.name, root.dept, root.course, root.cgpa])
+        display_dept_helper(root.right, dept, students)
 
 def display_course(root, course):
     if root:
-        display_course(root.left, course)
+        students = []
+        display_course_helper(root, course, students)
+        print(tabulate(students, headers=["Roll Number", "Name", "Department", "Course", "CGPA"], tablefmt="grid"))
+
+def display_course_helper(root, course, students):
+    if root:
+        display_course_helper(root.left, course, students)
         if root.course == course:
-                print(f"{root.id}   \t\t\t  {root.name} \t\t\t  {root.dept} \t\t\t  {root.course}   \t\t\t  {root.cgpa}")
-        display_course(root.right, course)
+            students.append([root.id, root.name, root.dept, root.course, root.cgpa])
+        display_course_helper(root.right, course)
 
 def preorder(root):
         if root:
@@ -182,7 +200,7 @@ if __name__ == '__main__':
         if(choice == 1):
             print("                        ADDING...")
             student=[]
-            student.append(int(input("Roll Number:")))
+            student.append(input("Roll Number:"))
             student.append(input("Name:"))
             student.append(input("Department:"))
             student.append(input("Course:"))
@@ -209,7 +227,6 @@ if __name__ == '__main__':
             else:
                 print("The Database is Empty.......")
 
-
         elif( choice==3):
             print("                        DISPLAY")
             if(student_no!=0):
@@ -221,22 +238,16 @@ if __name__ == '__main__':
                 if (display == '1'):
                     dept = input("Enter Department:")
                     print(dept)
-                    print("Roll Number       Name                Department         Course              CGPA")
                     display_dept(database, dept)
-                    print("     -              -                     -                 -                  -")
                 elif display == '2':
                     course = input("Enter Course:")
                     print(course)
-                    print("Roll Number       Name                Department         Course              CGPA")
                     display_course(database, course)
-                    print("     -              -                     -                 -                  -")
                 else:
                     print("DATABASE")
-                    print("Roll Number       Name                Department         Course              CGPA")
                     inorder(database)
             else:
                 print("The Database is Empty.......")
-
 
         elif(choice == 4):
             print("                        DELETING")
@@ -251,13 +262,11 @@ if __name__ == '__main__':
             else:
                 print("The Database is Empty.......")
 
-
         elif(choice==5):
             print("END OF PROGRAM")
 
         else:
             print("Enter Valid Input!!!")
-
 
 
 
